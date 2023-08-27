@@ -63,4 +63,45 @@ def home_page_main(request):
         fig.show()
 
     context = {"unique_themes": unique_themes, "themes_and_subthemes_dict": themes_and_subthemes_dict}
+
     return render(request, "homepage/home.html", context)
+
+
+def cafes_view_main(request):
+
+    cafes_file_path = str(BASE_DIR) + r"\templates\Data\cafes-and-restaurants-with-seating-capacity.xlsx"
+    print("Reading Cafes")
+    cafes_df = pd.read_excel(cafes_file_path)
+    print("DONE")
+
+    cafes_categories = cafes_df["industry_anzsic4_description"].values.tolist()
+    cafes_categories = np.unique(cafes_categories).tolist()
+
+    if request.method == "POST":
+        
+        chosen_category = request.POST.get("Category")
+
+        chosen_df = cafes_df.loc[cafes_df['industry_anzsic4_description'] == chosen_category]
+
+        print(chosen_df)
+
+        fig = px.scatter_mapbox(chosen_df,
+                                lon=chosen_df["longitude"], 
+                                lat=chosen_df["latitude"], 
+                                zoom=10, 
+                                color=chosen_df["block_id"], 
+                                size=chosen_df["property_id"], 
+                                width=1200,
+                                height=900,
+                                hover_data={
+                                "industry_anzsic4_description": True,
+                                "business_address": True,
+                                "trading_name": True}
+                                )
+        fig.update_layout(mapbox_style="open-street-map")
+        fig.update_layout(margin={"r":0,"t":50,"l":0,"b":10})
+        fig.show()
+
+    context = {"cafes_categories": cafes_categories}
+    
+    return render(request, "homepage/cafes.html", context)

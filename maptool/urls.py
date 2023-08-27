@@ -21,5 +21,6 @@ from homepage import views as homepage_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", homepage_views.home_page_main, name="home")
+    path("", homepage_views.home_page_main, name="home"),
+    path("cafes/", homepage_views.cafes_view_main, name="cafes")
 ]
