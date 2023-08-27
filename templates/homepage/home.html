@@ -1,0 +1,73 @@
+
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>
+                <label>1. Please Choose a Theme</label>
+            </td>
+            <td>
+                <select name="unique_theme" id="unique_theme" onchange="dynamic_dropdown(this);" required>
+                    {% for unique_theme in unique_themes %}
+                        <option value="{{ unique_theme }}">{{ unique_theme }}</option>
+                    {% endfor %}
+                    <option value="" disabled selected>Please Choose a Theme</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>2. Please Choose a Sub Theme</label>
+            </td>
+            <td>
+                <select name="unique_sub_theme" id="unique_sub_theme" required>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit">
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script>
+
+    function doHTML(list)
+    {
+        let string = "";
+        let index = 0;
+
+        string += '<option selected disabled>Select Sub Theme</option>'
+
+        list.forEach(element => {
+            string += '<option value="'
+            string += element
+            string += '">'
+            string += element
+            string += '</option>';
+        });
+
+        return string
+    }
+
+    function dynamic_dropdown(element)
+    {
+        {% for key, value1 in themes_and_subthemes_dict.items %}
+            chosen_key = "{{ key }}"
+            if (chosen_key == element.value)
+            {
+                x = chosen_key;
+                let y = [];
+
+                {% for value in value1 %}
+                    y.push("{{ value }}")
+                {% endfor %}
+                string = doHTML(y)
+                document.getElementById('unique_sub_theme').innerHTML = string;
+            }
+        {% endfor %}
+    }
+</script>
