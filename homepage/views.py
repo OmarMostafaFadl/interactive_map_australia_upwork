@@ -13,9 +13,13 @@ def home_page_main(request):
 
     # Reading the Inputs
     # file_path = r"E:\Work\UpWork Projects\Olawale Lawal Lawal - Interactive Map\Data\landmarks-and-places-of-interest-including-schools-theatres-health-services-spor.csv"
-    file_path = str(BASE_DIR) + r"\templates\Data\landmarks-and-places-of-interest-including-schools-theatres-health-services-spor.csv"
 
-    landmarks_df = pd.read_csv(file_path)
+    try:
+        file_path = str(BASE_DIR) + r"/templates/Data/landmarks-and-places-of-interest-including-schools-theatres-health-services-spor.csv"
+        landmarks_df = pd.read_csv(file_path)
+    except:
+        file_path = str(BASE_DIR) + r"\templates\Data\landmarks-and-places-of-interest-including-schools-theatres-health-services-spor.csv"
+        landmarks_df = pd.read_csv(file_path)
 
     # Getting Unique Themes
     themes = landmarks_df["theme"].values.tolist()
@@ -66,10 +70,16 @@ def home_page_main(request):
 
 def cafes_view_main(request):
 
-    cafes_file_path = str(BASE_DIR) + r"\templates\Data\cafes-and-restaurants-with-seating-capacity.xlsx"
-    print("Reading Cafes")
-    cafes_df = pd.read_excel(cafes_file_path)
-    print("DONE")
+    try:
+        cafes_file_path = str(BASE_DIR) + r"\templates\Data\cafes-and-restaurants-with-seating-capacity.xlsx"
+        print("Reading Cafes")
+        cafes_df = pd.read_excel(cafes_file_path)
+        print("DONE")
+    except:
+        cafes_file_path = str(BASE_DIR) + r"/templates/Data/cafes-and-restaurants-with-seating-capacity.xlsx"
+        print("Reading Cafes")
+        cafes_df = pd.read_excel(cafes_file_path)
+        print("DONE")
 
     cafes_categories = cafes_df["industry_anzsic4_description"].values.tolist()
     cafes_categories = np.unique(cafes_categories).tolist()
